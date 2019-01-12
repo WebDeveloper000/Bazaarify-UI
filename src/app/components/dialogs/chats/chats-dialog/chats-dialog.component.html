@@ -1,0 +1,26 @@
+<div class="backdrop" [ngClass]="{'is-active': isChatsDialogVisible}" (click)="onBackdropClicked()"></div>
+
+<div class="chats-dialog" [ngClass]="{'is-active': isChatsDialogVisible, 'has-items': chats && chats.length}">
+  <div class="chats-panel">
+    <div class="tooltip">
+      <div class="empty-message" *ngIf="! chats || !chats.length">
+        You dont have any messages
+      </div>
+
+      <div class="chats-list" *ngIf="chats && chats.length">
+        <h3 mat-subheader class="chat-list-header">Recent chats</h3>
+
+        <div class="spinner-box absolute" *ngIf="showSpinner">
+          <mat-spinner [diameter]="100"></mat-spinner>
+        </div>
+
+        <div class="chat-item" *ngFor="let chat of chats; let i = index">
+          <app-chat-card [chat]="chat" (click)="openThread(chat.storeId, chat.peerId)"></app-chat-card>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+

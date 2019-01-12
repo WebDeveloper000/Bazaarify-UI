@@ -1,0 +1,113 @@
+.dashboard{
+  padding: 6em 0 5em 0;
+  box-sizing: border-box;
+
+  // TODO this for search bar. Removes underline in input!
+  ::ng-deep .mat-input-underline {
+    display: none !important;
+  }
+
+  .search-nav{
+    height: 10%;
+    box-sizing: border-box;
+    padding: 0 1em;
+    .mat-form-field-underline{
+      display: none !important;
+      background-color: #fff;
+    }
+    .input-wr{
+      background: #fff;
+      overflow: hidden;
+      border-radius: 6px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease-in-out;
+      padding: 0.4em 1em 0 1em;
+    }
+    .button-wr{
+      text-align: right !important;
+      padding: 0.45em 0 0 0;
+      .mat-fab{
+        background: #3399ff;
+      }
+    }
+  }
+  .grid{
+    height: 90%;
+    box-sizing: border-box;
+    .grid-item{
+      height: 50%;
+      padding: 1em;
+      box-sizing: border-box;
+      .content{
+        cursor: pointer;
+        height: 100%;
+        background: #fff;
+        overflow: hidden;
+        border-radius: 6px;
+        box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+        transition: box-shadow 0.3s ease-in-out;
+        .item-img{
+          height: 80%;
+          display: flex;
+          align-items: center;
+          text-align: center;
+          justify-content: center;
+          img{
+            height: 80%;
+            transition: transform 0.3s ease-in-out;
+            display: flex;
+          }
+        }
+        .item-title{
+          height: 20%;
+          background: #19a1ff;
+          text-align: center;
+          text-transform: uppercase;
+          font-size: 1.2em;
+          font-weight: 400;
+          line-height: 100%;
+          color: #fff;
+          display: flex;
+          align-items: center;
+          text-align: center;
+          justify-content: center;
+          .title{
+            display: flex;
+          }
+        }
+        &:hover{
+          //box-shadow: 0px 4px 12px rgba(0,0,0,0.3);
+          .item-img{
+            img{
+              //transform: scale(1.04, 1.04);
+            }
+          }
+        }
+      }
+
+    }
+  }
+
+  .search-box{
+    position: relative;
+    .search-box-chips{
+      .chip{
+        margin: 0 0 0 8px;
+        cursor: pointer;
+        transition: box-shadow 280ms cubic-bezier(.4,0,.2,1);
+        display: inline-flex;
+        padding: 7px 12px;
+        border-radius: 24px;
+        align-items: center;
+        background-color: #e0e0e0;
+        color: rgba(0,0,0,.87);
+        font-size: 13px;
+        line-height: 18px;
+        &.selected{
+          background-color: #3399ff;
+          color: #fff;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+<div class="full-screen" *ngIf="userAuthed ? (userStatusWasLoaded && configurationLoaded) : configurationLoaded">
+  <div *ngIf="userAuthed">
+    <app-header></app-header>
+  </div>
+
+  <div class="main">
+    <app-social-share></app-social-share>
+      <div class="container">
+        <router-outlet></router-outlet>
+      </div>
+  </div>
+
+  <div *ngIf="userAuthed">
+    <app-footer></app-footer>
+  </div>
+</div>
+
+
+
+
+
+

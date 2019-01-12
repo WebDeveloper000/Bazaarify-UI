@@ -1,0 +1,100 @@
+<header>
+  <mat-toolbar>
+    <div class="container">
+      <span class="logo cursor-pointer" routerLink="/dashboard">
+        <img src="/assets/img/logo-small.svg" alt="">
+      </span>
+
+
+      <!--Only for unauthed in users-->
+      <!--<span class="button-row" *ngIf="! userAuthed">-->
+         <!--<button mat-button color="basic" routerLink="/login">Already have an account?</button>-->
+         <!--<button mat-button color="basic" routerLink="/register">Register</button>-->
+      <!--</span>-->
+
+      <!--Only for authed in users-->
+      <span class="button-row" *ngIf="userAuthed" style="padding-right:  0.6em;">
+
+        <span class="notifications-toggle">
+           <span matTooltip="Dashboard" routerLink="/dashboard">
+             <button mat-icon-button  color="basic" >
+               <mat-icon>home</mat-icon>
+             </button>
+          </span>
+        </span>
+
+
+         <span class="notifications-toggle">
+           <span matTooltip="Discovery search" routerLink="/discovery">
+             <button mat-icon-button  color="basic" >
+               <mat-icon>store</mat-icon>
+             </button>
+          </span>
+        </span>
+
+
+
+        <span class="notifications-toggle has-counter">
+           <span matTooltip="Notifications" (click)="openNotificationsDialog()">
+             <span class="counter" *ngIf="unreadNotificationsCount">{{unreadNotificationsCount}}</span>
+             <button mat-icon-button  color="basic" >
+               <mat-icon>notifications</mat-icon>
+             </button>
+          </span>
+        </span>
+
+
+        <span class="chats-toggle js-chats-toggle has-counter">
+           <span class="counter" *ngIf="unreadChatsCount">{{unreadChatsCount}}</span>
+
+          <span matTooltip="Chats" (click)="openChatsDialog()">
+            <button mat-icon-button  color="basic">
+              <mat-icon>chat</mat-icon>
+            </button>
+              <!--<span class="chats-panel-box">-->
+                <!--<app-chats-panel></app-chats-panel>-->
+              <!--</span>-->
+          </span>
+        </span>
+
+
+        <span matTooltip="Help" (click)="openHelpDialog()">
+          <button mat-icon-button  color="basic">
+            <mat-icon>help_outline</mat-icon>
+          </button>
+        </span>
+
+        <span matTooltip="Options">
+          <button mat-icon-button [matMenuTriggerFor]="menu" color="basic">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </span>
+
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item routerLink="/dashboard" class="app-link"  routerLinkActive="is-active">
+            <mat-icon>home</mat-icon>
+            <span>Dashboard</span>
+          </button>
+          <button mat-menu-item routerLink="/account-settings" class="app-link" routerLinkActive="is-active">
+            <mat-icon>settings</mat-icon>
+            <span>Account settings</span>
+          </button>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>exit_to_app</mat-icon>
+            <span>Sign out</span>
+          </button>
+        </mat-menu>
+      </span>
+
+    </div>
+  </mat-toolbar>
+
+  <!--All chats-->
+  <app-chats-dialog></app-chats-dialog>
+
+  <!--Selected thread-->
+  <app-chat-thred></app-chat-thred>
+
+  <!--Notifications-->
+  <app-notifications-dialog></app-notifications-dialog>
+</header>

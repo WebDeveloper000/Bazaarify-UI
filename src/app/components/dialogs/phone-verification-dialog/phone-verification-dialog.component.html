@@ -1,0 +1,14 @@
+<div class="phone-verification-dialog">
+  <form (submit)="verify()">
+    <h3>Pass 2F verification</h3>
+    <br>
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Verification token" [(ngModel)]="verificationToken" name="enteredCode" #enteredCode="ngModel">
+    </mat-form-field>
+
+    <div class="align-center">
+      <button mat-raised-button class="btn submit-btn" type="submit" >Verify</button>
+    </div>
+  </form>
+
+</div>

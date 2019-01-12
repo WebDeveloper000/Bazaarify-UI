@@ -1,0 +1,120 @@
+<div class="full">
+  <div class="grid">
+    <div class="page-wrap">
+
+      <div class="spinner-box absolute" *ngIf="showSpinner">
+        <mat-spinner [diameter]="100"></mat-spinner>
+      </div>
+
+      <div class="col-xs-12">
+        <div class="align-center" *ngIf="accountStatus">
+          <h2>
+            <a mat-button routerLink="/account-settings" style="border-bottom: 1px solid #ddd; font-size: 1em;">Account Balance: <span appUsdToBtc [usd]="accountStatus && accountStatus['balance']"></span></a>
+          </h2>
+          <br>
+        </div>
+
+        <!--Payment options-->
+        <div class="payment-options" *ngIf="accountStatus && accountStatus['balance'] && !(accountStatus.bitcoinTransactionConfirmed && !accountStatus.bitcoinTransactionConfirmed['expired'])">
+          <p>
+            Pay with credit/debit card or paypal account: &nbsp;<span id="paypal-button" class="paypal-btn"></span>
+          </p>
+          <br>
+          <p>
+            <b>Send the exact amount and do not send any other currency other than BTC or BCH</b>
+          </p>
+          <p>
+            Pay from: &nbsp;&nbsp;
+            <mat-radio-group [(ngModel)]="cryptoPayment.type" (change)="onCryptoCurrencyChange()">
+              <mat-radio-button value="BTC" [color]="ffffff">Bitcoin(BTC)</mat-radio-button>
+              <mat-radio-button value="BCH" [color]="ffffff">Bitcoin Cash(BCH)</mat-radio-button>
+            </mat-radio-group>
+          </p>
+          <p>
+            Pay with &nbsp;&nbsp;
+            <mat-radio-group [(ngModel)]="cryptoPayment.source">
+              <mat-radio-button value="storeWallet" [color]="ffffff">Store wallet</mat-radio-button>
+              <mat-radio-button value="externalWallet" [color]="ffffff">External wallet</mat-radio-button>
+            </mat-radio-group>
+          </p>
+
+
+          <div class="form-wrap col-xs-12 col-sm-10 col-md-7 centered-bootstrap-cell">
+            <form #f="ngForm" (ngSubmit)="confirmInternalWalletPayment();" *ngIf="cryptoPayment.source == 'storeWallet'">
+              <mat-form-field>
+                <mat-select placeholder="Wallets">
+                  <!--<mat-option *ngFor="let store of accountStatus.billingItems" [value]="store.value">-->
+                  <!--{{ store.storeId }}-->
+                  <!--</mat-option>-->
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field class="example-full-width">
+                <input type="email" matInput placeholder="Ammount" [(ngModel)]="userEmail" name="email" #email="ngModel" placeholder="Email" required email>
+                <mat-error *ngIf="email.touched && email.invalid">
+                  <mat-error *ngIf="email.hasError('email') && email.value">
+                    Please enter a valid email address
+                  </mat-error>
+                  <mat-error *ngIf="email.hasError('required')">
+                    Email address is required
+                  </mat-error>
+                </mat-error>
+              </mat-form-field>
+
+              <div class="align-center">
+                <button mat-raised-button class="btn submit-btn" type="submit" [disabled]="f.invalid">Confirm</button>
+              </div>
+
+            </form>
+
+            <form #f="ngForm" (ngSubmit)="confirmExternalWalletPayment();" *ngIf="cryptoPayment.source == 'externalWallet'">
+              <div class="align-center">
+                After confirmation dedicated address will be generated to process payment. It may take several minutes.
+                <br>
+                <button mat-raised-button class="btn submit-btn" type="submit" [disabled]="f.invalid">Confirm</button>
+              </div>
+            </form>
+            <br>
+            <br>
+          </div>
+        </div>
+
+        <!--If bitcoin transaction was confirmed-->
+        <div *ngIf="bitcoinTransactionConfirmed.configured && ! bitcoinTransactionConfirmed.expired">
+          <button mat-button class="btn" (click)="approveExternalWalletPayment()">Already paid?</button> &nbsp;&nbsp;
+          <button mat-button  (click)="cancelExternalWalletPayment()">Cancel payment</button>
+          <br>
+          <br>
+
+          <section class="example-section">
+
+            <mat-progress-bar
+              class="example-margin"
+              color="primary"
+              mode="indeterminate">
+            </mat-progress-bar>
+          </section>
+
+          <countdown units="Minutes | Seconds"  end="{{bitcoinTransactionConfirmed['expirationTime']}}"></countdown>
+
+          <b>Type:</b> {{cryptoPayment['type']}}
+          <br>
+          <b>Address:</b> {{ bitcoinTransactionConfirmed.addresses[cryptoPayment['type']['BIP72b']] }}
+          <br>
+          <br>
+          <img appQrcode [qrcodeData]="bitcoinTransactionConfirmed.qrcodedata" alt="">
+          <br>
+          <br>
+          <b>Amount:</b> {{ bitcoinTransactionConfirmed.paymentSubtotals[cryptoPayment['type']] / 100000000 }} <br>
+          <b>Fee:</b> {{ bitcoinTransactionConfirmed.minerFees[cryptoPayment['type']].totalFee / 100000000}} <br>
+          <b>Total:</b> {{ bitcoinTransactionConfirmed.paymentTotals[cryptoPayment['type']] / 100000000 }}
+
+          <!--<div class="crypto-payment-data" *ngIf="cryptoPayment['qrcode']">-->
+          <!--<img [src]="cryptoPayment['qrcode']" class="qr-code" alt="">-->
+          <!--</div>-->
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

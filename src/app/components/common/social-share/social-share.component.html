@@ -1,0 +1,29 @@
+<div class="social-share">
+  <div class="items-wrap">
+    <div class="item">
+      <button mat-fab shareButton="facebook" [style.backgroundColor]="share.prop.facebook.color" sbTitle="Share Bazaarify!" sbDescription="Share Bazaarify!" sbUrl="https://bazaarify.me">
+        <i [class]="share.prop.facebook.icon"></i>
+      </button>
+    </div>
+    <div class="item">
+      <button mat-fab shareButton="twitter" [style.backgroundColor]="share.prop.twitter.color" sbTitle="Share Bazaarify!" sbDescription="Share Bazaarify!" sbUrl="https://bazaarify.me">
+        <i [class]="share.prop.twitter.icon"></i>
+      </button>
+    </div>
+    <div class="item" (click)="openRedditShareWindow()">
+      <button mat-fab  [style.backgroundColor]="share.prop.reddit.color" sbTitle="Share Bazaarify!" sbDescription="Share Bazaarify!" sbUrl="https://bazaarify.me">
+        <i [class]="share.prop.reddit.icon"></i>
+      </button>
+    </div>
+    <div class="item">
+      <button mat-fab shareButton="linkedin" [style.backgroundColor]="share.prop.linkedin.color" sbTitle="Share Bazaarify!" sbDescription="Share Bazaarify!" sbUrl="https://bazaarify.me">
+        <i [class]="share.prop.linkedin.icon"></i>
+      </button>
+    </div>
+    <div class="item">
+      <button mat-fab style="background-color: #fff;" (click)="openSteemitShareWindow()">
+        <img src="/assets/img/steemit-logo.png" alt="" style="width: 1.5em;">
+      </button>
+    </div>
+  </div>
+</div>
