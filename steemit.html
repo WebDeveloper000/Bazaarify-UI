@@ -1,0 +1,177 @@
+<html>
+<head><title>steem-js posting example</title></head>
+<body>
+<div class="header">
+  <img src="https://steemit-production-imageproxy-thumbnail.s3.amazonaws.com/DQmUGojp38u9sSMvPhXTqHGC1TqbG9ixDAb6gAKSdRhMuaR_1680x8400"  class="logo" alt="">
+</div>
+<div class="content">
+  <h2>Share Bazaarify to the steem blockchain!</h2>
+  <form action="" name="postForm" id="postForm">
+    Username: <input required id="username" type="text" value=""><br/>
+    Password: <input required id="pwd" size="65" type="password" value=""><br/>
+    Title of article: <input required id="title" type="text" value="Bazaarify"><br/>
+    Article text:<br/>
+    <textarea required id="article" rows="7"></textarea><br/>
+    Tags divided by space. First one would be article main category: <textarea  required id="tags">bazaarify</textarea><br/>
+    <input id="postIt" type="submit" value="Post it!" >
+  </form>
+</div>
+</body>
+</html>
+
+
+<style>
+  html, body{
+    margin: 0;
+    padding: 0;
+    background: #fcfcfc;
+    font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+    font-weight: lighter;
+    color: #525252;
+  }
+  .content{
+    width: 90%;
+    margin: 0 auto;
+    float: none;
+  }
+
+  *{
+    outline:  none !important;
+  }
+
+  .header{
+    background:  #fff;
+    padding: 0.5em 2em;
+    box-shadow: 0px 2px 4px  rgba(0,0,0,0.2);
+    -webkit-box-shadow: 0px 2px 4px  rgba(0,0,0,0.2);
+  }
+
+  .logo{
+    width:  10em;
+    max-width: 100%;
+  }
+
+  [type='text'], [type='password'], [type='date'], [type='datetime'], [type='datetime-local'], [type='month'], [type='week'], [type='email'], [type='number'], [type='search'], [type='tel'], [type='time'], [type='url'], [type='color'], textarea{
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    height: 2.4375rem;
+    margin: 0 0 1rem;
+    padding: 0.5rem;
+    border: 1px solid #cacaca;
+    border-radius: 3px;
+    background-color: #fefefe;
+    box-shadow: inset 0 1px 2px rgba(51, 51, 51, 0.1);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: normal;
+    color: #333333;
+    transition: box-shadow 0.5s, border-color 0.25s ease-in-out;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0.5rem;
+    height: auto;
+  }
+
+  textarea{
+    max-width: 100%;
+  }
+
+  .button{
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 0 1rem 0;
+    padding: 0.85em 1em;
+    -webkit-appearance: none;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    transition: background-color 0.25s ease-out, color 0.25s ease-out;
+    font-size: 0.9rem;
+    line-height: 1;
+    text-align: center;
+    cursor: pointer;
+    background-color: #1A5099;
+    color: #fefefe;
+    cursor: pointer;
+  }
+
+  #postIt{
+    cursor: pointer;
+    background-color: #171F24;
+    box-shadow: 0px 0px 0px 0 transparent, 4px 4px 0px 0px #06D6A9;
+    color: #fcfcfc;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.2s all ease-in-out;
+    text-transform: capitalize;
+    border-radius: 0;
+    text-decoration: none;
+    text-transform: capitalize;
+    font-size: 18px;
+    font-size: 1.125rem;
+  }
+</style>
+
+<script src="https://cdn.steemjs.com/lib/latest/steem.min.js"></script>
+
+<script language="JavaScript">
+  window.onload = function() {
+      document.getElementById("postForm").addEventListener("submit", postArticle);
+  }
+
+  function slug(str) {
+    str = str.replace(/^\s+|\s+$/g, ''); // trim
+    str = str.toLowerCase();
+
+    // remove accents, swap ñ for n, etc
+    var from = "ãàáäâẽèéëêìíïîõòóöôùúüûñç·/_,:;";
+    var to   = "aaaaaeeeeeiiiiooooouuuunc------";
+    for (var i=0, l=from.length ; i<l ; i++) {
+      str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+    }
+
+    str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+      .replace(/\s+/g, '-') // collapse whitespace and replace by -
+      .replace(/-+/g, '-'); // collapse dashes
+
+    return str;
+  };
+
+  function postArticle(e)
+  {
+      e.preventDefault();
+
+      var tags = document.getElementById('tags').value.split(/\b\s+/)
+
+    steem.broadcast.comment(
+      document.getElementById('pwd').value,
+      '',
+      tags[0], // first tag as main category
+      document.getElementById('username').value, // username
+      slug(document.getElementById('title').value), // permalink
+      document.getElementById('title').value, // Title
+      document.getElementById('article').value, // Body of post
+      {tags: tags},
+      function (err, result) {
+        console.log(err);
+        if (err) {
+          if (err.actual && err.expected) {
+            alert('You shoul use your private API key to post!');
+          }
+          if (err.data && err.data.code == 10) {
+            alert('You may post once in a 5 minutes!');
+          }
+        }
+
+        if (result) {
+          alert('Posted!');
+
+        }
+
+      }
+    );
+  }
+</script>

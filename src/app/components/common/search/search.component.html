@@ -1,0 +1,151 @@
+<div class="backdrop" [ngClass]="{'is-active': isSearchActive}" (click)="onBackdropClicked()"></div>
+
+<!--<div class="search-component is-active has-items" >-->
+<!--<div class="search-component has-items" [ngClass]="{'is-active': isSearchActive, 'has-items': results && results.length}">-->
+<div class="search-component has-items" [ngClass]="{'is-active': isSearchActive}">
+  <div class="search-component-panel">
+    <div class="tooltip">
+      <div class="spinner-box absolute" *ngIf="listingsAreLoading || storesAreLoading">
+        <mat-spinner [diameter]="100"></mat-spinner>
+      </div>
+
+      <div class="empty-message absoluted" *ngIf="results && (! results.stores.length && !results.listings.length)">
+        <span>No search results found for "{{searchTerm}}"</span>
+      </div>
+
+      <div class="search-component-list" *ngIf="results && (results.stores.length || results.listings.length)">
+
+
+        <h3 mat-subheader class="search-component-header">Search results for "{{searchTerm}}"</h3>
+       <div class="col-xs-12">
+         <span>Filter by:</span> &nbsp;&nbsp;
+         <mat-chip-list class="search-results-filter" style="display: inline-block">
+           <mat-chip selected="{{searchResultsFilter == 'all'}}" (click)="toggleSearchResultsFilter('all')">All</mat-chip>
+           <mat-chip selected="{{searchResultsFilter == 'stores'}}" (click)="toggleSearchResultsFilter('stores')">Stores</mat-chip>
+           <mat-chip selected="{{searchResultsFilter == 'listings'}}" (click)="toggleSearchResultsFilter('listings')">Listings</mat-chip>
+         </mat-chip-list>
+         <br>
+         <br>
+       </div>
+
+       <div class="stores-result" *ngIf="searchResultsFilter == 'stores' || searchResultsFilter == 'all'">
+         <div class="col-xs-12">
+           <h3>Stores</h3>
+         </div>
+         <div class="empty-message" *ngIf="results && ! results.stores.length">
+           No stores found for "{{searchTerm}}"
+         </div>
+         <div class="items-set-box col-xs-12">
+           <div class="search-item-box col-xs-12 col-sm-3" *ngFor="let item of results['stores']">
+
+             <div class="search-item">
+               <div class="photo-thumb">
+                 <img [src]="item?.data.thumb" class="img-fit-wrapper" alt="">
+               </div>
+               <div class="info">
+                 <div class="info-btn">
+                   <button mat-mini-fab (click)="openThread(item.key)">
+                     <mat-icon aria-label="Example icon-button with a heart icon">message</mat-icon>
+                   </button>
+                   <button mat-mini-fab>
+                     <mat-icon aria-label="Example icon-button with a heart icon">person_add</mat-icon>
+                   </button>
+                   <button mat-mini-fab>
+                     <mat-icon aria-label="Example icon-button with a heart icon">launch</mat-icon>
+                   </button>
+                 </div>
+                 <div class="title">
+                   {{item?.data.Settings.data.name}}
+                 </div>
+               </div>
+             </div>
+
+             <!--<mat-card class="search-item">-->
+               <!--<mat-card-header>-->
+                 <!--<mat-card-title class="search-item-title">{{item?.data.Settings.data.name}}</mat-card-title>-->
+               <!--</mat-card-header>-->
+               <!--<div class="photo-thumb" [style.background-image]="item?.data.thumb"></div>-->
+               <!--<mat-card-content>-->
+                 <!--<div class="search-item-btns">-->
+                   <!--<button mat-icon-button (click)="openThread(item.key)">-->
+                     <!--<mat-icon aria-label="Example icon-button with a heart icon">message</mat-icon>-->
+                   <!--</button>-->
+                   <!--<button mat-icon-button>-->
+                     <!--<mat-icon aria-label="Example icon-button with a heart icon">person_add</mat-icon>-->
+                   <!--</button>-->
+                   <!--<button mat-icon-button>-->
+                     <!--<mat-icon aria-label="Example icon-button with a heart icon">info_outlines</mat-icon>-->
+                   <!--</button>-->
+
+                 <!--</div>-->
+               <!--</mat-card-content>-->
+             <!--</mat-card>-->
+           </div>
+         </div>
+       </div>
+
+      <div class="listings-result" *ngIf="searchResultsFilter == 'listings' || searchResultsFilter == 'all'">
+        <div class="col-xs-12">
+          <h3>Listings</h3>
+        </div>
+        <div class="empty-message" *ngIf="results && ! results.listings.length">
+          No listings found for "{{searchTerm}}"
+        </div>
+        <div class="items-set-box col-xs-12">
+          <div class="search-item-box col-xs-12 col-sm-3" *ngFor="let item of results['listings']">
+
+            <div class="search-item">
+              <div class="photo-thumb">
+                <img [src]="item?.thumb" class="img-fit-wrapper" alt="">
+              </div>
+              <div class="info">
+                <div class="info-btn">
+                  <button mat-mini-fab>
+                    <mat-icon aria-label="Example icon-button with a heart icon">launch</mat-icon>
+                  </button>
+                </div>
+                <div class="title">
+                  {{item?.data.title}}
+                </div>
+                <div class="description">
+                  {{item?.data.description | htmlToPlaintext | getExcerpt}}
+                </div>
+              </div>
+            </div>
+
+            <!--<mat-card class="search-item">-->
+              <!--<mat-card-header>-->
+                <!--<mat-card-title class="search-item-title">{{item?.data.title}}</mat-card-title>-->
+              <!--</mat-card-header>-->
+              <!--<div class="photo-thumb" [style.background-image]="item?.thumb"></div>-->
+              <!--<mat-card-content>-->
+                <!--<p>-->
+                  <!--<br>-->
+                  <!--<b>Price</b>: {{item?.data.price.amount}} {{item?.data.price.currencyCode}}-->
+                <!--</p>-->
+              <!--</mat-card-content>-->
+            <!--</mat-card>-->
+          </div>
+
+
+          <!--<div class="col-xs-12 align-center" *ngIf="notificationsAll && (notificationsAll.length > limitToShow)">-->
+          <div class="col-xs-12 align-center" *ngIf="moreListingsToLoadFound">
+            <button mat-mini-fab class="bg-default" (click)="loadMoreListings()">
+              <mat-icon aria-label="Example icon-button with a heart icon">expand_more</mat-icon>
+            </button>
+            <br>
+            <br>
+            <br>
+          </div>
+        </div>
+      </div>
+
+
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+

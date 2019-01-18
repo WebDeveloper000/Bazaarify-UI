@@ -1,0 +1,65 @@
+<div class="help-dialog">
+  <h3 *ngIf="dialogWasFiredFrom === 'header'">How can we help?</h3>
+  <div *ngIf="dialogWasFiredFrom === 'footer'">
+    <h3>Send us feedback</h3>
+    <p>
+      You can help us improve Bazaarify by leaving us feedback about anything that isn` working right or that could be working better.
+    </p>
+  </div>
+
+  <form #f="ngForm" (ngSubmit)="sendFeedback();">
+    <mat-form-field class="example-full-width">
+      <input type="text" matInput placeholder="Subject" [(ngModel)]="feedback.subject" name="subject" #subject="ngModel" placeholder="Subject" required>
+      <mat-error *ngIf="message.touched && message.invalid">
+        <mat-error *ngIf="message.hasError('required')">
+          Subject is required
+        </mat-error>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <textarea matInput placeholder="Message" [(ngModel)]="feedback.message" name="message" #message="ngModel" required></textarea>
+      <mat-error *ngIf="message.touched && message.invalid">
+        <mat-error *ngIf="message.hasError('required')">
+          Message is required
+        </mat-error>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <input type="email" matInput placeholder="Email" [(ngModel)]="feedback.email" name="email" #email="ngModel" placeholder="Email" required email>
+      <mat-error *ngIf="email.touched && email.invalid">
+        <mat-error *ngIf="email.hasError('email') && email.value">
+          Please enter a valid email address
+        </mat-error>
+        <mat-error *ngIf="email.hasError('required')">
+          Email address is required
+        </mat-error>
+      </mat-error>
+    </mat-form-field>
+
+
+    <input class="hidden" id="file" name="file"  (change)="upload($event)" multiple type="file"/>
+    <div>
+      <label for="file" mat-button class="mat-button" *ngIf="!attachments.length && !filesUploading">Choose Files</label>
+
+      <label mat-button class="mat-button" *ngIf="attachments.length && !filesUploading">
+        <div *ngFor="let item of attachments; let i = index" class="attachment">
+          {{item.filename}}
+          <span matTooltip="Delete attachment" matTooltipPosition="right">
+              <mat-icon (click)="deleteAttachment(i)"  class="delete-btn">delete</mat-icon>
+          </span>
+        </div>
+      </label>
+
+      <label class="mat-button" *ngIf="filesUploading">Uploading</label>
+      <mat-spinner *ngIf="filesUploading" [diameter]="30" [color]="accent"></mat-spinner>
+    </div>
+    <div>
+      <button mat-button class="btn submit-btn" type="submit" [disabled]="f.invalid || filesUploading">Send</button>
+    </div>
+  </form>
+
+
+
+</div>

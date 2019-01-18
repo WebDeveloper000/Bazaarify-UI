@@ -1,0 +1,50 @@
+<div class="notifications-panel">
+  <div class="tooltip">
+    <div id="heading">
+      <div class="heading-title">Recent notifications
+        <span class="action-btn mark-as-read" (click)="clearUnreadNotifications()" *ngIf="unreadNotificationsCount">
+            <span matTooltip="Mark all as read">
+              <mat-icon>check_circle</mat-icon>
+             </span>
+          </span>
+      </div>
+    </div>
+
+    <ul class="notification-list" *ngIf="! notifications || !notifications.length">
+      <li class="notification-item">You don`t have notifications so far</li>
+    </ul>
+
+    <ul class="notification-list" *ngIf="notifications && notifications.length">
+      <li class="notification-item" *ngFor="let notification of notifications" [ngClass]="{'is-unread': ! notification.data.read}">
+        <div class="icon col-xs-1">
+          <mat-icon *ngIf="notification.data.notification.type == 'notification'">chat</mat-icon>
+          <mat-icon *ngIf="notification.data.notification.type == 'update_notification'">chat</mat-icon>
+          <mat-icon *ngIf="notification.data.notification.type == 'payment'">payment</mat-icon>
+          <mat-icon *ngIf="notification.data.notification.type == 'order'">add_shopping_cart</mat-icon>
+
+          <!--TODO search for follow icon here-->
+          <mat-icon *ngIf="notification.data.notification.type == 'follow'"></mat-icon>
+        </div>
+        <div class="message col-xs-9">
+          <small class="store">Store: {{notification.storeId}}</small>
+          <br>
+          {{notification.data.notification.title ? notification.data.notification.title :  'Title was not provided'}}
+          <br>
+          <small class="date">{{notification.data.timestamp | date:'short'}}</small>
+        </div>
+        <div class="action col-xs-2" >
+
+          <span class="action-btn delete" (click)="deleteNotification(notification)">
+                        <span matTooltip="Delete">
+                          <mat-icon>delete</mat-icon>
+                         </span>
+                      </span>
+        </div>
+      </li>
+    </ul>
+
+    <div class="load-more-pined">
+      <button mat-button mat-raised-button routerLink="/notifications">See all</button>
+    </div>
+  </div>
+</div>

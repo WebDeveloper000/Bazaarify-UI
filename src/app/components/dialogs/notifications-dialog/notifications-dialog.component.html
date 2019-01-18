@@ -1,0 +1,99 @@
+<div class="backdrop" [ngClass]="{'is-active': isNotificationsDialogVisible}" (click)="onBackdropClicked()"></div>
+
+<div class="notifications-dialog" [ngClass]="{'is-active': isNotificationsDialogVisible, 'has-items': notifications && notifications.length}">
+  <div class="notifications-panel">
+    <div class="tooltip">
+
+      <div class="empty-message" *ngIf="! notifications || !notifications.length">
+        You don`t have notifications so far
+      </div>
+
+      <mat-list class="notification-list" *ngIf="notifications && notifications.length">
+        <h3 mat-subheader class="notification-list-header">Recent notifications
+          <span class="action-btn clear-notifications" (click)="clearAllNotificatons()">
+            <span matTooltip="Clear all notifications">
+              <mat-icon>delete</mat-icon>
+             </span>
+          </span>
+          <mat-divider></mat-divider>
+        </h3>
+
+        <div class="spinner-box absolute" *ngIf="showSpinner">
+          <mat-spinner [diameter]="100"></mat-spinner>
+        </div>
+
+        <mat-list-item *ngFor="let notification of notifications; let i = index" [ngClass]="{'is-unread': ! notification.data.read}">
+          <div mat-card-avatar class="store-thumb" *ngIf="notification.storeData">
+            <img src="{{notification.storeData?.thumb}}" class="img-fit-wrapper" alt="">
+          </div>
+
+          <!--TODO move to directive-->
+          <div mat-list-icon [ngSwitch]="notification.data.notification.type"
+               [ngClass]="{
+                'notification-type-notification': notification.data.notification.type == 'notification',
+                'notification-type-dispute': notification.data.notification.type == 'disputeOpen' || notification.data.notification.type == 'disputeClose' || notification.data.notification.type == 'disputeUpdate',
+                'notification-type-payment': notification.data.notification.type == 'payment',
+                'notification-type-fulfillment': notification.data.notification.type == 'fulfillment',
+                'notification-type-follow': notification.data.notification.type == 'follow',
+                'notification-type-default': ! notification.data.notification.type
+               }">
+            <!--NOTIFICATION-->
+            <template *ngSwitchCase="'notification'">
+              <mat-icon>chat</mat-icon>
+            </template>
+
+            <!--DISPUTE-->
+            <template *ngSwitchCase="'disputeOpen'">
+              <mat-icon>business_center</mat-icon>
+            </template>
+            <template *ngSwitchCase="'disputeClose'">
+              <mat-icon>business_center</mat-icon>
+            </template>
+            <template *ngSwitchCase="'disputeUpdate'">
+              <mat-icon>business_center</mat-icon>
+            </template>
+
+            <!--PAYMENT-->
+            <template *ngSwitchCase="'payment'">
+              <mat-icon>payment</mat-icon>
+            </template>
+
+            <!--FULFILLMENT-->
+            <template *ngSwitchCase="'fulfillment'">
+              <mat-icon>done</mat-icon>
+            </template>
+
+            <!--FOLLOW-->
+            <template *ngSwitchCase="'follow'">
+              <mat-icon>person_add</mat-icon>
+            </template>
+
+            <!--DEFAULT-->
+            <template *ngSwitchDefault>
+              <mat-icon>notifications</mat-icon>
+            </template>
+          </div>
+          <h4 mat-line>
+            <span *ngIf="notification.storeData">
+              <small class="store"><b>{{notification.storeData?.name}}</b></small>
+              <br>
+            </span>
+            {{notification.data.notification.title ? notification.data.notification.title :  'Title not set'}}
+          </h4>
+          <p mat-line> {{notification.data.timestamp | date:'short'}} </p>
+
+          <mat-divider *ngIf="i < notifications.length - 1"></mat-divider>
+        </mat-list-item>
+
+      </mat-list>
+
+
+    </div>
+  </div>
+
+  <div class="load-more-pined" *ngIf="notifications && notifications.length">
+    <button mat-button (click)="closeNotificationsDialog()" routerLink="/notifications">See all</button>
+  </div>
+</div>
+
+

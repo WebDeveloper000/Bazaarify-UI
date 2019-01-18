@@ -1,0 +1,28 @@
+.social-share{
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 5em;
+  position: fixed;
+  left: 2em;
+  z-index: 4;
+  .item{
+    margin: 1em 0;
+  }
+  .mat-fab{
+    //width: 46px;
+    //height: 46px;
+    .mat-button-wrapper{
+    }
+  }
+  .mat-fab span{
+    //display: none;
+    //padding: 10px 0 !important;
+    //line-height: 12px !important;
+    //i{
+    //}
+  }
+}
+.mat-button-wrapper{
+  display: none !important;
+}
